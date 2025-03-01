@@ -17,20 +17,28 @@ import './App.css';
 
 function App() {
   const [button, setButton] = useState(0);
+ 
   return (
     <div className="App">
       <button
       onClick={()=>{
         increment(button,setButton)
       }}>
-       increment
+       Increment
+      </button>
+      <button
+      onClick={()=>resetState(setButton)}>
+        Reset
       </button>
       {button}
     </div>
   );
 }
-function increment(count:number, setCount:any) {
+function increment(count:number, setCount: (a: number) => void ) {
 setCount(count+1);
+}
+function resetState(setDefault: (a: number) => void ) {
+setDefault(0);
 }
 
 export default App;
