@@ -13,49 +13,56 @@ import './App.css';
  * }
  * @returns 
  */
-
 function App() {
-  const [num1, setNum1] = useState<number>(0);
-  const [num2, setNum2] = useState<number>(0);
-  const [result, setResult] = useState<number|null>(null);
-  const handleNum1Change = (e:React.ChangeEvent<HTMLInputElement>) => {
-    setNum1(Number(e.target.value));
-  };
+  type Player = "X" | "O" | null;
+  type BoardState = Player[];
+
+  const [board, setBoard] = useState<BoardState>(Array(9).fill(null))
+  const [player, setPlayer] = useState<Player>("X");
+  const [winner, setWinner] = useState<Player>(null);
+
+  const handleClick = (index : number) => {
+    if(board[index] || winner)
+      return;
+    const newBoard = [...board];
+    newBoard[index] = player; 
+
+    setBoard(newBoard);
+    checkWinner(newBoard);
+    setPlayer(player === "X" ? "O" : "X");
+  }
+
+  const winningCombination = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ]
+  const checkWinner = (board: BoardState) => {
+    const winnerFound = winningCombination.find(([a, b, c]) =>
+      board[a] && board[a] === board[b] && board[a] === board[c]
+    );
+    if (winnerFound) {
+      setWinner(board[winnerFound[0]]);
+    } else if (!board.includes(null)) {
+      setWinner("Draw" as Player);
+    }  
+  }
   
-  const handleNum2Change = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNum2(Number(e.target.value));
-  };
-  const addition = () => {
-    setResult(num1 + num2);
-  };
-  
-  const subtraction = () => {
-    setResult(num1 - num2);
-  };
-  const multiplication = () => setResult(num1 * num2);
-  const division = () => {
-    if (num2 !== 0) setResult(num1 / num2);
-    else alert("Cannot divide by zero");
-  };
-  const modulus = () => setResult(num1 % num2);
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-    <h1>React Calculator</h1>
-
-    <input type="number" value={num1} onChange={handleNum1Change} />
-    <input type="number" value={num2} onChange={handleNum2Change} />
-
-    <div style={{ margin: "10px" }}>
-      <button onClick={addition}>+</button>
-      <button onClick={subtraction}>-</button>
-      <button onClick={multiplication}>×</button>
-      <button onClick={division}>÷</button>
-      <button onClick={modulus}>%</button>
+    <div className="board">
+        {board.map((value, index) => (
+            <button key={index} onClick={() => handleClick(index)}>
+                {value}
+            </button>
+        ))}
+      {winner && <div>Winner: {winner}</div>}
     </div>
-
-    <h2>Result: {result !== null ? result : "Enter numbers"}</h2>
-  </div>
-  )
+);
 }
 
 
