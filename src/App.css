@@ -1,0 +1,32 @@
+.app {
+  width: 100%;
+  max-width: 480px;
+}
+
+.app-title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--text);
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--text-muted);
+  margin-top: 3rem;
+  font-size: 1rem;
+}
+
+.error-message {
+  text-align: center;
+  color: var(--error);
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
+
+.loading-text {
+  text-align: center;
+  color: var(--text-muted);
+  margin-top: 1rem;
+}
